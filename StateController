@@ -1,0 +1,66 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class animationStateController : MonoBehaviour
+{
+    Animator animator;
+    int isWalkingHash;
+    int isRunningHash;
+    int isSlidingHash;
+
+    // Start is called before the first frame update
+    void Start()
+    {
+        animator = GetComponent<Animator>();
+        isWalkingHash = Animator.StringToHash("isWalking");
+        isRunningHash = Animator.StringToHash("isRunning");
+        isSlidingHash = Animator.StringToHash("isSliding");
+    }
+
+    // Update is called once per frame
+    void Update()
+    {
+        bool isSliding = animator.GetBool(isSlidingHash);
+        bool isrunning = animator.GetBool(isRunningHash);
+        bool isWalking = animator.GetBool(isWalkingHash);
+        bool forwardPressed = Input.GetKey("w");
+        bool runPressed = Input.GetKey("left shift");
+        bool slidePressed = Input.GetKey("left ctrl");
+
+        if (!isWalking && forwardPressed)
+        {
+            animator.SetBool(isWalkingHash, true);
+        }
+        
+        if (isWalking && !forwardPressed)
+        {
+            animator.SetBool(isWalkingHash, false);
+        }
+
+        if (!isrunning && (forwardPressed && runPressed))
+        {
+            animator.SetBool(isRunningHash, true);
+        }
+
+        if (isrunning && (!forwardPressed || !runPressed))
+        {
+            animator.SetBool(isRunningHash, false);
+        }
+
+        if (isWalking && !slidePressed)
+        {
+            animator.SetBool(isSlidingHash, false);
+        }
+
+        if (!isWalking && slidePressed)
+        {
+            animator.SetBool(isSlidingHash, false);
+        }
+
+        if(isWalking && slidePressed)
+        {
+            animator.SetBool(isSlidingHash, true);
+        }
+    }
+}
